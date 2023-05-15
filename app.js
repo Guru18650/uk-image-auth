@@ -50,7 +50,13 @@ app.get('/', async function(req, res) {
       res.render('login', {bad:false, p:pID});}
     else
       res.render('info', {m:"Bad query, please try again later"});
+});
 
+app.get('/image', async function(req, res){
+if(req.query.n)
+res.sendFile('uploads/'+req.query.n);
+else
+res.send(404);
 });
 
 app.set('views', './views');
