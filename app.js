@@ -54,7 +54,7 @@ app.get('/', async function(req, res) {
 
 app.get('/image', async function(req, res){
 if(req.query.n)
-res.sendFile(__dirname + 'uploads/'+req.query.n);
+res.sendFile(__dirname + '/uploads/'+req.query.n);
 else
 res.send(404);
 });
