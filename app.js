@@ -5,6 +5,7 @@ const path = require('path');
 const { pid } = require('process');
 const QueryString = require('qs');
 var sha256 = require('js-sha256');
+const fetch = require('node-fetch')
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.post('/', async function(req, res) {
 	if (req.body.username && req.body.password) {
     username = req.body.username;
   	let password = req.body.password;
-    const re = await fetch("https://api.unrealkingdoms.com/v1/login", {method: 'POST',headers: {'Accept': 'application/json','Content-Type': 'application/json'},body: `{"email":"${username}","password":"${password}"}`});
+    const re = await fetch("https://api.unrealkingdoms.com/auth/login", {method: 'POST',headers: {'Accept': 'application/json','Content-Type': 'application/json'},body: `{"email":"${username}","password":"${password}"}`});
     
     re.json();
     if(re.status != 200){
@@ -36,7 +37,7 @@ app.post('/', async function(req, res) {
       t = new Date().getTime();
       nm = sha256(image.name+t)+'.png';
       image.mv(__dirname + '/upload/' + nm);
-      const re = await fetch("https://api.unrealkingdoms.com/v1/addPanel", {method: 'POST',headers: {'Accept': 'application/json','Content-Type': 'application/json'},body: `{"pnum":"${pID}","texture":"${nm}","title":"${title}","description":"${description}","url":"${url}","owner":"${username}"}`});
+      const re = await fetch("https://api.unrealkingdoms.com/panels/add", {method: 'POST',headers: {'Accept': 'application/json','Content-Type': 'application/json'},body: `{"id":"${pID}","texture":"${nm}","title":"${title}","description":"${description}","url":"${url}","owner":"${username}"}`});
       res.render('info', {m:"Success, you can close this window"});
     } else {
       res.render('login', {bad:false, p: pID});
